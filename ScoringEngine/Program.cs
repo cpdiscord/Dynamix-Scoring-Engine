@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Management;
+using System.ServiceProcess;
 using File = System.IO.File;
 
 namespace ScoringEngine
@@ -87,7 +88,7 @@ namespace ScoringEngine
                 }
             }
         }
-        public static void UserPasswordChangeable(string user) //Grabs if it password is changeable or not.
+        public static void UserPasswordChangeable(string user) //Grabs it it password is changeable or not.
         {
             SelectQuery query = new SelectQuery("Win32_UserAccount", "Name=" + "'" + user + "'");
             ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
@@ -138,7 +139,26 @@ namespace ScoringEngine
         }
 
 
-        
+        public static void ServiceRunning(string service)
+        {
+            ServiceController sc = new ServiceController(service);
+            if (sc.Status.ToString() == "Running")
+            {
+                HtmlScoring(service + " is running");
+            }
+            else { }
+        }
+        public static void ServiceStopped(string service)
+        {
+            ServiceController sc = new ServiceController(service);
+            if (sc.Status.ToString() == "Stopped")
+            {
+                HtmlScoring(service + " is stopped");
+            }
+            else { }
+        }
+
+
 
         public static void HtmlScoring(string text) //A simple script to output any lines above the </ul>
         {
@@ -167,5 +187,19 @@ namespace ScoringEngine
             shortcut.IconLocation = "C:\\DyNaMiX\\dx-128-icon.ico";
             shortcut.Save();
         }
+
+        //public static void CreateHTML(string currentVulns, string totalVulns)
+        //{
+        //    File.Delete(@"C:\DyNaMiX\score_report.html");
+        //    File.Copy(@"C:\DyNaMiX\base_report.html", @"C:\DyNaMiX\score_report.html");
+
+        //    string location = @"C:\DyNaMiX\score_report.html";
+        //    string lineToFind = "<br>";
+
+        //    List<string> lines = File.ReadLines(location).ToList();
+        //    int index = lines.IndexOf(lineToFind);
+        //    lines.Insert(index, "<center><h2>Vulnerabilities fixed: " + currentVulns + "/" + totalVulns + "</h2></center>");
+        //    File.WriteAllLines(location, lines);
+        //}
     }
 }
