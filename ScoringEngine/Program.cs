@@ -1,4 +1,5 @@
 ﻿using IWshRuntimeLibrary;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -233,6 +234,21 @@ namespace ScoringEngine
         }
 
 
+        public static void IsProgramInstalled(string program) //Guess what, it detects if it's installed
+        {
+            if (SoftwareName(program) == true)
+            {
+                HtmlScoring(program + " has been installed");
+            }
+        }
+        public static void IsProgramUninstalled(string program) //Detects if it's uninstalled
+        {
+            if (SoftwareName(program) == false)
+            {
+                HtmlScoring(program + " has been uninstalled");
+            }
+        }
+
 
         public static void HtmlScoring(string text) //Outputs input above "</ul>"
         {
@@ -287,6 +303,21 @@ namespace ScoringEngine
             };
             process.StartInfo = startInfo;
             process.Start();
+        }
+
+        private static bool SoftwareName(string softwareName)
+        {
+            var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall") ??
+                      Registry.LocalMachine.OpenSubKey(
+                          @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall");
+
+            if (key == null)
+                return false;
+
+            return key.GetSubKeyNames()
+                .Select(keyName => key.OpenSubKey(keyName))
+                .Select(subkey => subkey.GetValue("DisplayName") as string)
+                .Any(displayName => displayName != null && displayName.Contains(softwareName));
         }
     }
 }
