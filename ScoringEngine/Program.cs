@@ -207,6 +207,33 @@ namespace ScoringEngine
         }
 
 
+        public static void OptionFeatureDisable(string feature) //Detects if an optional feature is disabled
+        {
+            SelectQuery query = new SelectQuery("Win32_OptionalFeature", "Name=" + "'" + feature + "'" + '"');
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
+            foreach (ManagementObject envVar in searcher.Get())
+            {
+                if (envVar["InstallState"].ToString() == "2")
+                {
+                    HtmlScoring(feature + "has been disabled");
+                }
+            }
+        }
+        public static void OptionFeatureEnable(string feature) //Detects if an optional feature is enabled
+        {
+            SelectQuery query = new SelectQuery("Win32_OptionalFeature", "Name=" + "'" + feature + "'" + '"');
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
+            foreach (ManagementObject envVar in searcher.Get())
+            {
+                if (envVar["InstallState"].ToString() == "1")
+                {
+                    HtmlScoring(feature + "has been enabled");
+                }
+            }
+        }
+
+
+
         public static void HtmlScoring(string text) //Outputs input above "</ul>"
         {
             string location = @"C:\\DyNaMiX\\score_report.html";
