@@ -1,8 +1,10 @@
 ﻿using IWshRuntimeLibrary;
 using Microsoft.Win32;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.DirectoryServices;
 using System.IO;
 using System.Linq;
 using System.Management;
@@ -248,6 +250,71 @@ namespace ScoringEngine
                 HtmlScoring(program + " has been uninstalled");
             }
         }
+
+
+        public static void GroupMembershipTrue(string user, string groupName)
+        {
+            using (DirectoryEntry machine = new DirectoryEntry("WinNT://localhost"))
+            {
+                using (DirectoryEntry group = machine.Children.Find(groupName, "Group"))
+                {
+                    List<string> groupMembers = new List<string>();
+                    object members = group.Invoke("Members", null);
+                    foreach (object member in (IEnumerable)members)
+                    {
+                        string accountName = new DirectoryEntry(member).Name;
+                        groupMembers.Add(accountName);
+                    }
+                    if (groupMembers.Contains(user) == true)
+                    {
+                        HtmlScoring(user + " is apart of " + groupName);
+                    }
+                }
+            }
+        }
+        public static void GroupMembershipFalse(string user, string groupName)
+        {
+            using (DirectoryEntry machine = new DirectoryEntry("WinNT://localhost"))
+            {
+                using (DirectoryEntry group = machine.Children.Find(groupName, "Group"))
+                {
+                    List<string> groupMembers = new List<string>();
+                    object members = group.Invoke("Members", null);
+                    foreach (object member in (IEnumerable)members)
+                    {
+                        string accountName = new DirectoryEntry(member).Name;
+                        groupMembers.Add(accountName);
+                    }
+                    if (groupMembers.Contains(user) == false)
+                    {
+                        HtmlScoring(user + " is not apart of " + groupName);
+                    }
+                }
+            }
+        }
+
+
+        public static void GroupExistTrue(string group)
+        {
+            var machine = Environment.MachineName;
+            var server = new DirectoryEntry(string.Format("WinNT://{0},Computer", machine));
+            bool exists = server.Children.Cast<DirectoryEntry>().Any(d => d.SchemaClassName.Equals("Group") && d.Name.Equals(group));
+            if (exists == true)
+            {
+                HtmlScoring(group + " exists");
+            }
+        }
+        public static void GroupExistFalse(string group)
+        {
+            var machine = Environment.MachineName;
+            var server = new DirectoryEntry(string.Format("WinNT://{0},Computer", machine));
+            bool exists = server.Children.Cast<DirectoryEntry>().Any(d => d.SchemaClassName.Equals("Group") && d.Name.Equals(group));
+            if (exists == false)
+            {
+                HtmlScoring(group + " does not exist");
+            }
+        }
+
 
 
         public static void HtmlScoring(string text) //Outputs input above "</ul>"
