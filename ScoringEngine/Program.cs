@@ -161,7 +161,7 @@ namespace ScoringEngine
         }
 
 
-        public static void LSPMinimumPasswordAge() //Checks if the MinimumPasswordAge is between 1-30
+        public static void LSPMinimumPasswordAge(int minValue, int maxValue) //Checks if the MinimumPasswordAge is between minValue and maxValue
         {
             string[] lines = System.IO.File.ReadAllLines(@"C:\DyNaMiX\Current-Policy.txt");
             string minimumPassword = Array.Find(lines,
@@ -170,15 +170,15 @@ namespace ScoringEngine
             string temp = minimumPassword.Split(new string[] { "MinimumPasswordAge = " }, StringSplitOptions.None).Last();
 
             int.TryParse(temp, out int minimumPasswordVal);
-            if (minimumPasswordVal > 0)
+            if (minimumPasswordVal >= minValue)
             {
-                if (30 >= minimumPasswordVal)
+                if (maxValue >= minimumPasswordVal)
                 {
                     HtmlScoring("Minimum Password Age has been set");
                 }
             }
         }
-        public static void LSPMaximumPasswordAge() //Checks if the MaximumPasswordAge is between 30-90
+        public static void LSPMaximumPasswordAge(int minValue, int maxValue) //Checks if the MaximumPasswordAge is between minValue and maxValue
         {
             string[] lines = System.IO.File.ReadAllLines(@"C:\DyNaMiX\Current-Policy.txt");
             string maximumPassword = Array.Find(lines,
@@ -187,15 +187,15 @@ namespace ScoringEngine
             string temp = maximumPassword.Split(new string[] { "MaximumPasswordAge = " }, StringSplitOptions.None).Last();
 
             int.TryParse(temp, out int maximumPasswordVal);
-            if (maximumPasswordVal >= 30)
+            if (maximumPasswordVal >= minValue)
             {
-                if (90 >= maximumPasswordVal)
+                if (maxValue >= maximumPasswordVal)
                 {
                     HtmlScoring("Maximum Password Age has been set");
                 }
             }
         }
-        public static void LSPPasswordComplexity() //Checks if PasswordComplexity is set to 1 (Enabled)
+        public static void LSPPasswordComplexity(int desiredValue) //Checks if PasswordComplexity is set to 1 (Enabled)
         {
             string[] lines = System.IO.File.ReadAllLines(@"C:\DyNaMiX\Current-Policy.txt");
             string passwordComplexity = Array.Find(lines,
@@ -203,7 +203,7 @@ namespace ScoringEngine
             string temp = passwordComplexity.Split(new string[] { "PasswordComplexity = " }, StringSplitOptions.None).Last();
 
             int.TryParse(temp, out int passwordComplexityVal);
-            if (passwordComplexityVal == 1)
+            if (passwordComplexityVal == desiredValue)
             {
                 HtmlScoring("Password Complexity has been set");
             }
