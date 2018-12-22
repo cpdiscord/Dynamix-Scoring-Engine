@@ -25,11 +25,12 @@ namespace ScoringEngine
 		}
 		public static void Run()
 		{
-			CreateHTML(20);
+			CreateHTML();
 
-
-			System.Threading.Thread.Sleep(30000); //Sleeps for 30 seconds before running again. This is just a loop.
-			Run();
+            EditHTML(1);
+            System.Threading.Thread.Sleep(30000); //Sleeps for 30 seconds before running again. This is just a loop.
+            CreateHTML();
+            Run();
 		}
 
 
@@ -120,13 +121,13 @@ namespace ScoringEngine
 		{
 			FileVersionInfo program = FileVersionInfo.GetVersionInfo(@location);
 			string programVersion = program.FileVersion;
-			string fileName = Path.GetFileNameWithoutExtension(@location);
+			string fileName = UppercaseFirst(Path.GetFileNameWithoutExtension(@location));
 			var result = programVersion.CompareTo(desiredVersion);
 			if (result > 0)
 			{
-				currentVulns = currentVulns + 1;
+                currentVulns = currentVulns + 1;
 				HtmlScoring(fileName + " has been updated to the latest version");
-			}
+            }
 			else if (result < 0) { }
 			else
 			{
@@ -344,8 +345,86 @@ namespace ScoringEngine
 		}
 
 
+        public static void IEInternetZone(string desiredValue)
+        {
+            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3"))
+            {
+                if (key != null)
+                {
+                    var value = key.GetValue("CurrentLevel").ToString();
+                    if (value == desiredValue)
+                    {
+                        currentVulns = currentVulns + 1;
+                        HtmlScoring("Internet Explorer zone set for Internet");
+                    }
+                }
+            }
+        }
+        public static void IEIntranetZone(string desiredValue)
+        {
+            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\1"))
+            {
+                if (key != null)
+                {
+                    var value = key.GetValue("CurrentLevel").ToString();
+                    if (value == desiredValue)
+                    {
+                        currentVulns = currentVulns + 1;
+                        HtmlScoring("Internet Explorer zone set for Intranet");
+                    }
+                }
+            }
+        }
+        public static void IETrustedZone(string desiredValue)
+        {
+            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\2"))
+            {
+                if (key != null)
+                {
+                    var value = key.GetValue("CurrentLevel").ToString();
+                    if (value == desiredValue)
+                    {
+                        currentVulns = currentVulns + 1;
+                        HtmlScoring("Internet Explorer zone set for Trusted Sites");
+                    }
+                }
+            }
+        }
+        public static void IERestrictedZone(string desiredValue)
+        {
+            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3"))
+            {
+                if (key != null)
+                {
+                    var value = key.GetValue("CurrentLevel").ToString();
+                    if (value == desiredValue)
+                    {
+                        currentVulns = currentVulns + 1;
+                        HtmlScoring("Internet Explorer zone set for Restricted Sites");
+                    }
+                }
+            }
+        }
 
-		public static void HtmlScoring(string text) //Outputs input above "</ul>"
+        public static void IEPopup(string desiredValue)
+        {
+            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Internet Explorer\New Windows"))
+            {
+                if (key != null)
+                {
+                    var value = key.GetValue("PopupMgr").ToString();
+                    if (value == desiredValue)
+                    {
+                        currentVulns = currentVulns + 1;
+                        HtmlScoring("Popup blocker in Internet Explorer as been enabled");
+                    }
+                }
+            }
+        }
+
+
+
+        public static void HtmlScoring(string text) //Outputs input above "</ul>"
 		{
 			string location = @"C:\\DyNaMiX\\score_report.html";
 			string lineToFind = "</ul>";
@@ -372,22 +451,24 @@ namespace ScoringEngine
 			shortcut.Save();
 		}
 
-		public static void CreateHTML(int totalVulns)
+		public static void CreateHTML()
 		{
 			File.Delete(@"C:\DyNaMiX\score_report.html");
 			File.Copy(@"C:\DyNaMiX\base_report.html", @"C:\DyNaMiX\score_report.html");
-
-			string location = @"C:\DyNaMiX\score_report.html";
-			string lineToFind = "<br>";
-
-			List<string> lines = File.ReadLines(location).ToList();
-			int index = lines.IndexOf(lineToFind);
-			lines.Insert(index, "<center><h2>Vulnerabilities fixed: " + currentVulns + "/" + totalVulns + "</h2></center>");
-			File.WriteAllLines(location, lines);
-			currentVulns = 0;
 		}
+        public static void EditHTML(int totalVulns)
+        {
+            string location = @"C:\DyNaMiX\score_report.html";
+            string lineToFind = "<br>";
 
-		public static void ExportLSP() //Exports Local Security Policy
+            List<string> lines = File.ReadLines(location).ToList();
+            int index = lines.IndexOf(lineToFind);
+            lines.Insert(index, "<center><h2>Vulnerabilities fixed: " + currentVulns + "/" + totalVulns + "</h2></center>");
+            File.WriteAllLines(location, lines);
+            currentVulns = 0;
+        }
+
+        public static void ExportLSP() //Exports Local Security Policy
 		{
 			//This has to be run as admin
 			System.Diagnostics.Process process = new System.Diagnostics.Process();
@@ -415,7 +496,18 @@ namespace ScoringEngine
 				.Select(subkey => subkey.GetValue("DisplayName") as string)
 				.Any(displayName => displayName != null && displayName.Contains(softwareName));
 		}
-	}
+
+        public static string UppercaseFirst(string s)
+        {
+            // Check for empty string.
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+            // Return char and concat substring.
+            return char.ToUpper(s[0]) + s.Substring(1);
+        }
+    }
 }
 //UwU
 // D Y N A M I X
