@@ -21,13 +21,13 @@ namespace ScoringEngine
 		static void Main(string[] args)
 		{
 			AppShortcutToDesktop();
-			Run();
+            CreateHTML();
+            Run();
 		}
 		public static void Run()
 		{
-			CreateHTML();
+            //Insert commands here
 
-            EditHTML(1);
             System.Threading.Thread.Sleep(30000); //Sleeps for 30 seconds before running again. This is just a loop.
             CreateHTML();
             Run();
@@ -45,11 +45,13 @@ namespace ScoringEngine
 		}
 
 
-		public static void ForensicsCheck(string location, string answer) //Forensics checker, grabs location and searches for the string "answer"
+		public static void ForensicsCheck(string location, string answerTemp) //Forensics checker, grabs location and searches for the string "answer"
 		{
 			{
 				string line;
-				System.IO.StreamReader file = new System.IO.StreamReader(@location);
+                string answer = "ANSWER: " + answerTemp;
+
+                System.IO.StreamReader file = new System.IO.StreamReader(@location);
 				while ((line = file.ReadLine()) != null)
 				{
 					if (line.Contains(answer))
