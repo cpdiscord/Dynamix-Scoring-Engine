@@ -32,7 +32,7 @@ namespace ScoringEngine
             ParseScore();
 
 
-            EditHTML(1);
+            EditHTML();
             System.Threading.Thread.Sleep(2000); //Sleeps for 20 seconds before running again. This is just a loop.
             CreateHTML();
             Run();
@@ -466,20 +466,20 @@ namespace ScoringEngine
 			File.Delete(@"C:\DyNaMiX\score_report.html");
 			File.Copy(@"C:\DyNaMiX\base_report.html", @"C:\DyNaMiX\score_report.html");
 		}
-        public static void EditHTML(int totalVulns)
+        public static void EditHTML()
         {
             string location = @"C:\DyNaMiX\score_report.html";
             string lineToFind = "			<!--issues-->";
 
             List<string> lines = File.ReadLines(location).ToList();
             int index = lines.IndexOf(lineToFind);
-            lines.Insert(index, "<li class=\"issuesTitle\">Security Issues (" + currentVulns + " out of " + totalVulns + " resolved)</li>");
+            lines.Insert(index, "<li class=\"issuesTitle\">Security Issues (" + currentVulns + " out of " + TotalVulns() + " resolved)</li>");
             File.WriteAllLines(location, lines);
 
             string lineToFind2 = "			<!--scored-->";
 
             int index2 = lines.IndexOf(lineToFind2);
-            lines.Insert(index, "<li>" + currentVulns + " out of " + totalVulns + " security issues resolved</li>");
+            lines.Insert(index, "<li>" + currentVulns + " out of " + TotalVulns() + " security issues resolved</li>");
             File.WriteAllLines(location, lines);
 
             currentVulns = 0;
