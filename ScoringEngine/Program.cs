@@ -30,7 +30,9 @@ namespace ScoringEngine
             //Insert commands here
             ParseScore();
 
-            System.Threading.Thread.Sleep(3000); //Sleeps for 30 seconds before running again. This is just a loop.
+
+            EditHTML(TotalVulns());
+            System.Threading.Thread.Sleep(20000); //Sleeps for 20 seconds before running again. This is just a loop.
             CreateHTML();
             Run();
 		}
@@ -473,6 +475,12 @@ namespace ScoringEngine
             lines.Insert(index, "<center><h2>Vulnerabilities fixed: " + currentVulns + "/" + totalVulns + "</h2></center>");
             File.WriteAllLines(location, lines);
             currentVulns = 0;
+        }
+
+        public static int TotalVulns()
+        {
+            int lineCount = File.ReadLines(@"C:\DyNaMiX\answers.xml").Count();
+            return lineCount - 3;
         }
 
         public static void ExportLSP() //Exports Local Security Policy
