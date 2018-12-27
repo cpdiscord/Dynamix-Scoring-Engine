@@ -27,11 +27,12 @@ namespace ScoringEngine
 		}
 		public static void Run()
 		{
+            ExportLSP();
             //Insert commands here
             ParseScore();
 
 
-            //EditHTML(TotalVulns());
+            EditHTML(1);
             System.Threading.Thread.Sleep(2000); //Sleeps for 20 seconds before running again. This is just a loop.
             CreateHTML();
             Run();
@@ -240,27 +241,27 @@ namespace ScoringEngine
 
 		public static void OptionFeatureDisable(string feature) //Detects if an optional feature is disabled
 		{
-			SelectQuery query = new SelectQuery("Win32_OptionalFeature", "Name=" + "'" + feature + "'" + '"');
+			SelectQuery query = new SelectQuery("Win32_OptionalFeature", "Name='" + feature + "'");
 			ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
 			foreach (ManagementObject envVar in searcher.Get())
 			{
 				if (envVar["InstallState"].ToString() == "2")
 				{
 					currentVulns = currentVulns + 1;
-					HtmlScoring(feature + "has been disabled");
+					HtmlScoring(feature + " has been disabled");
 				}
 			}
 		}
 		public static void OptionFeatureEnable(string feature) //Detects if an optional feature is enabled
 		{
-			SelectQuery query = new SelectQuery("Win32_OptionalFeature", "Name=" + "'" + feature + "'" + '"');
+			SelectQuery query = new SelectQuery("Win32_OptionalFeature", "Name='" + feature + "'");
 			ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
 			foreach (ManagementObject envVar in searcher.Get())
 			{
 				if (envVar["InstallState"].ToString() == "1")
 				{
 					currentVulns = currentVulns + 1;
-					HtmlScoring(feature + "has been enabled");
+					HtmlScoring(feature + " has been enabled");
 				}
 			}
 		}
@@ -433,16 +434,15 @@ namespace ScoringEngine
 
         public static void HtmlScoring(string text) //Outputs input above "</ul>"
 		{
-            /*string location = @"C:\\DyNaMiX\\score_report.html";
-            string lineToFind = "</ul>";
+            string location = @"C:\\DyNaMiX\\score_report.html";
+            string lineToFind = "			<!--correct-->";
 
 			List<string> lines = File.ReadLines(location).ToList();
 			int index = lines.IndexOf(lineToFind);
 			lines.Insert(index, "<li>" + text + "</li>");
 			File.WriteAllLines(location, lines);
-            */
 
-            //Currently broken with new score report, will fix when it is done
+            Console.WriteLine(text); //Just a debug
 		}
 
 		public static void AppShortcutToDesktop() //Creates a shortcut to the desktop. 
@@ -469,12 +469,19 @@ namespace ScoringEngine
         public static void EditHTML(int totalVulns)
         {
             string location = @"C:\DyNaMiX\score_report.html";
-            string lineToFind = "<br>";
+            string lineToFind = "			<!--issues-->";
 
             List<string> lines = File.ReadLines(location).ToList();
             int index = lines.IndexOf(lineToFind);
-            lines.Insert(index, "<center><h2>Vulnerabilities fixed: " + currentVulns + "/" + totalVulns + "</h2></center>");
+            lines.Insert(index, "<li class=\"issuesTitle\">Security Issues (" + currentVulns + " out of " + totalVulns + " resolved)</li>");
             File.WriteAllLines(location, lines);
+
+            string lineToFind2 = "			<!--scored-->";
+
+            int index2 = lines.IndexOf(lineToFind2);
+            lines.Insert(index, "<li>" + currentVulns + " out of " + totalVulns + " security issues resolved</li>");
+            File.WriteAllLines(location, lines);
+
             currentVulns = 0;
         }
 
@@ -540,7 +547,7 @@ namespace ScoringEngine
             for (int i = 0; i < forensicsDetection.Count; i++)
             {
                 string tempVar = forensicsDetection[i].InnerText;
-                string[] words = tempVar.Split(':');
+                string[] words = tempVar.Split('|');
                 string location = words[0];
                 string answer = words[1];
                 ForensicsCheck(location, answer);
@@ -577,11 +584,15 @@ namespace ScoringEngine
             XmlNodeList programVersion = xmlDoc.GetElementsByTagName("programversion");
             for (int i = 0; i < programVersion.Count; i++)
             {
-                string tempVar = programVersion[i].InnerText;
-                string[] words = tempVar.Split(':');
-                string location = words[0];
-                string desiredVersion = words[1];
-                ProgramVersionCheck(location, desiredVersion);
+                try
+                {
+                    string tempVar = programVersion[i].InnerText;
+                    string[] words = tempVar.Split('|');
+                    string location = words[0];
+                    string desiredVersion = words[1];
+                    ProgramVersionCheck(location, desiredVersion);
+                }
+                catch { Console.WriteLine("Invalid Location! (This can appear while updating)"); }
             }
 
             XmlNodeList shareDetection = xmlDoc.GetElementsByTagName("sharedetection");
@@ -609,7 +620,7 @@ namespace ScoringEngine
             for (int i = 0; i < LSPMinimum.Count; i++)
             {
                 string tempVar = LSPMinimum[i].InnerText;
-                string[] words = tempVar.Split(':');
+                string[] words = tempVar.Split('|');
                 int min = int.Parse(words[0]);
                 int max = int.Parse(words[1]);
                 LSPMinimumPasswordAge(min, max);
@@ -619,7 +630,7 @@ namespace ScoringEngine
             for (int i = 0; i < LSPMaximum.Count; i++)
             {
                 string tempVar = LSPMaximum[i].InnerText;
-                string[] words = tempVar.Split(':');
+                string[] words = tempVar.Split('|');
                 int min = int.Parse(words[0]);
                 int max = int.Parse(words[1]);
                 LSPMaximumPasswordAge(min, max);
@@ -664,7 +675,7 @@ namespace ScoringEngine
             for (int i = 0; i < groupMembershipTrue.Count; i++)
             {
                 string tempVar = groupMembershipTrue[i].InnerText;
-                string[] words = tempVar.Split(':');
+                string[] words = tempVar.Split('|');
                 string user = words[0];
                 string groupName = words[1];
                 GroupMembershipTrue(user, groupName);
@@ -674,7 +685,7 @@ namespace ScoringEngine
             for (int i = 0; i < groupMembershipFalse.Count; i++)
             {
                 string tempVar = groupMembershipFalse[i].InnerText;
-                string[] words = tempVar.Split(':');
+                string[] words = tempVar.Split('|');
                 string user = words[0];
                 string groupName = words[1];
                 GroupMembershipFalse(user, groupName);
