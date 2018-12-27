@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Management;
 using System.ServiceProcess;
+using System.Xml;
 using File = System.IO.File;
 
 namespace ScoringEngine
@@ -27,8 +28,9 @@ namespace ScoringEngine
 		public static void Run()
 		{
             //Insert commands here
+            ParseScore();
 
-            System.Threading.Thread.Sleep(30000); //Sleeps for 30 seconds before running again. This is just a loop.
+            System.Threading.Thread.Sleep(3000); //Sleeps for 30 seconds before running again. This is just a loop.
             CreateHTML();
             Run();
 		}
@@ -65,14 +67,15 @@ namespace ScoringEngine
 		}
 
 
-		public static void FirewallCheck() //Grabs the status of the firewall
+		public static void FirewallCheck(string status) //Grabs the status of the firewall. status must be "True" or "False"
 		{
 			Type FWManagerType = Type.GetTypeFromProgID("HNetCfg.FwMgr");
 			dynamic FWManager = Activator.CreateInstance(FWManagerType);
-			if (Convert.ToString(FWManager.LocalPolicy.CurrentProfile.FirewallEnabled) == "True")
+			if (Convert.ToString(FWManager.LocalPolicy.CurrentProfile.FirewallEnabled) == status)
 			{
 				currentVulns = currentVulns + 1;
-				HtmlScoring("Firewall has been enabled");
+                Console.WriteLine("Done");
+				HtmlScoring("Firewall has been set");
 			}
 			else { }
 		}
@@ -279,7 +282,7 @@ namespace ScoringEngine
 		}
 
 
-		public static void GroupMembershipTrue(string user, string groupName)
+		public static void GroupMembershipTrue(string user, string groupName) //If a member is apart of a group
 		{
 			using (DirectoryEntry machine = new DirectoryEntry("WinNT://localhost"))
 			{
@@ -300,7 +303,7 @@ namespace ScoringEngine
 				}
 			}
 		}
-		public static void GroupMembershipFalse(string user, string groupName)
+		public static void GroupMembershipFalse(string user, string groupName) //If a member is NOT apart of a group
 		{
 			using (DirectoryEntry machine = new DirectoryEntry("WinNT://localhost"))
 			{
@@ -323,7 +326,7 @@ namespace ScoringEngine
 		}
 
 
-		public static void GroupExistTrue(string group)
+		public static void GroupExistTrue(string group) //If a group exists
 		{
 			var machine = Environment.MachineName;
 			var server = new DirectoryEntry(string.Format("WinNT://{0},Computer", machine));
@@ -334,7 +337,7 @@ namespace ScoringEngine
 				HtmlScoring(group + " exists");
 			}
 		}
-		public static void GroupExistFalse(string group)
+		public static void GroupExistFalse(string group) //If a group does not exist
 		{
 			var machine = Environment.MachineName;
 			var server = new DirectoryEntry(string.Format("WinNT://{0},Computer", machine));
@@ -347,7 +350,7 @@ namespace ScoringEngine
 		}
 
 
-        public static void IEInternetZone(string desiredValue)
+        public static void IEInternetZone(string desiredValue) //Zones for Internet Explorer
         {
             using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3"))
             {
@@ -428,13 +431,15 @@ namespace ScoringEngine
 
         public static void HtmlScoring(string text) //Outputs input above "</ul>"
 		{
-			string location = @"C:\\DyNaMiX\\score_report.html";
-			string lineToFind = "</ul>";
+            //string location = @"C:\\DyNaMiX\\score_report.html";
+            //string lineToFind = "</ul>";
 
-			List<string> lines = File.ReadLines(location).ToList();
-			int index = lines.IndexOf(lineToFind);
-			lines.Insert(index, "<li>" + text + "</li>");
-			File.WriteAllLines(location, lines);
+			//List<string> lines = File.ReadLines(location).ToList();
+			//int index = lines.IndexOf(lineToFind);
+			//lines.Insert(index, "<li>" + text + "</li>");
+			//File.WriteAllLines(location, lines);
+
+            //Currently broken with new score report, will fix when it is done
 		}
 
 		public static void AppShortcutToDesktop() //Creates a shortcut to the desktop. 
@@ -508,6 +513,36 @@ namespace ScoringEngine
             }
             // Return char and concat substring.
             return char.ToUpper(s[0]) + s.Substring(1);
+        }
+
+        public static void ParseScore() //This is to be expanded, this is just a proof on concept. 
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(@"C:\DyNaMiX\answers.xml");
+
+            XmlNodeList fileDetection = xmlDoc.GetElementsByTagName("filedetection");
+            for (int i = 0; i < fileDetection.Count; i++)
+            {
+                string tempVar = fileDetection[i].InnerText;
+                FileDetection(tempVar);
+            }
+
+            XmlNodeList forensicsDetection = xmlDoc.GetElementsByTagName("forensics");
+            for (int i = 0; i < forensicsDetection.Count; i++)
+            {
+                string tempVar = forensicsDetection[i].InnerText;
+                string[] words = tempVar.Split(':');
+                string location = words[0];
+                string answer = words[1];
+                ForensicsCheck(location, answer);
+            }
+
+            XmlNodeList firewallCheck = xmlDoc.GetElementsByTagName("firewall");
+            for (int i = 0; i < firewallCheck.Count; i++)
+            {
+                string tempVar = firewallCheck[i].InnerText;
+                FirewallCheck(tempVar);
+            }
         }
     }
 }
