@@ -31,8 +31,8 @@ namespace ScoringEngine
             ParseScore();
 
 
-            EditHTML(TotalVulns());
-            System.Threading.Thread.Sleep(20000); //Sleeps for 20 seconds before running again. This is just a loop.
+            //EditHTML(TotalVulns());
+            System.Threading.Thread.Sleep(2000); //Sleeps for 20 seconds before running again. This is just a loop.
             CreateHTML();
             Run();
 		}
@@ -157,7 +157,7 @@ namespace ScoringEngine
 				if (inList == false)
 				{
 					currentVulns = currentVulns + 1;
-					HtmlScoring(desiredShare + " has been deleted");
+					HtmlScoring("Share" + '"' + desiredShare + '"' + " has been deleted");
 				}
 				else { }
 			}
@@ -433,13 +433,14 @@ namespace ScoringEngine
 
         public static void HtmlScoring(string text) //Outputs input above "</ul>"
 		{
-            //string location = @"C:\\DyNaMiX\\score_report.html";
-            //string lineToFind = "</ul>";
+            /*string location = @"C:\\DyNaMiX\\score_report.html";
+            string lineToFind = "</ul>";
 
-			//List<string> lines = File.ReadLines(location).ToList();
-			//int index = lines.IndexOf(lineToFind);
-			//lines.Insert(index, "<li>" + text + "</li>");
-			//File.WriteAllLines(location, lines);
+			List<string> lines = File.ReadLines(location).ToList();
+			int index = lines.IndexOf(lineToFind);
+			lines.Insert(index, "<li>" + text + "</li>");
+			File.WriteAllLines(location, lines);
+            */
 
             //Currently broken with new score report, will fix when it is done
 		}
