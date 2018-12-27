@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="31">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700" rel="stylesheet">
+    <style type="text/css">
+    body {
+        font-family: Roboto, Arial;
+        background-color: #FFFFFF;
+        margin: 0;
+    }
+    
+    div.upper {
+        background-color: #00596F;
+        color: #FFFFFF;
+        padding-top: 50px;
+        padding-left: 15%;
+        padding-right: 15%;
+        padding-bottom: 10px;
+    }
+    
+    div.middle, div.lower {
+        background-color: #FFFFFF;
+        margin-left: 15%;
+        margin-right: 15%;
+    }
+    
+    div.scoreSummary {
+        display: inline-block;
+    }
+    
+    div.runtime {
+        display: inline-block;
+        float: right;
+        background-color: #FFFFFF;
+        color: #000000;
+        text-align: center;
+        margin-top: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        border-radius: 20px;
+    }
+    
+    div.issues {
+        display: inline-block;
+    }
+    
+    div.superSecretFeature {
+        display: inline-block;
+        float: right;
+    }
+    
+    div.graph {
+    background-color: #C8C8C8;
+    }
+    
+    ul {
+        padding: 0;
+        list-style-type: none;
+    }
+    
+    li {
+        padding: 0;
+        list-style-type: none;
+    }
+    
+    li.mainTitle {
+        font-size: 130%;
+        font-weight: bold;
+    }
+    
+    li.runtimeTitle {
+        font-size: 75%;
+    }
+    
+    li.issuesTitle {
+        font-weight: bold;
+    }
+    
+    #issuesID {
+        visibility: visible;
+        opacity: 1;
+        transition: visibility 3s, opacity 1s;
+    }
+    
+    #hideButton {
+        background-color: #C8C8C8;
+        color: #000000;
+        padding: 5px;
+    }
+    
+    footer {
+        font-size: 75%;
+        margin-top: 20px;
+    }
+    </style>
+    
+    <script>
+    function hideButton() {
+        var x = document.getElementById("issuesID");
+        var y = document.getElementById("hideButton");
+        if (x.style.visibility === "hidden") {
+            x.style.visibility = "visible";
+            x.style.opacity = "1";
+            y.innerHTML = "Hide";
+        } else {
+            x.style.visibility = "hidden";
+            x.style.opacity = "0";
+            y.innerHTML = "Unhide";
+        }
+    }
+    </script>
+    
+    <title>DyNaMiX Score Report</title>
+</head>
+<body>
+    <div class="upper">
+        <div class="scoreSummary">
+            <ul>
+            <li class="mainTitle">Name</li>
+            <li># out of # security issues resolved</li>
+            <li># out of # points scored</li>
+            <li># penalties (# points lost)</li>
+            </ul>
+        </div>
+        <div class="runtime">
+            <ul>
+            <li class="runtimeTitle">Image Running Time</li>
+            <li class="mainTitle"><!-- Image running time here! --></li>
+        </div>
+    </div>
+    <div class="middle">
+        <br>
+        <div class="issues">
+            <li class="issuesTitle">Security Issues (# out of # resolved)</li>
+            <hr/>
+            <ul id="issuesID">
+            <li><!-- Place answers in individual <li> tags --></li>
+            </ul>
+            <button id="hideButton" onclick="hideButton()">Hide</button>
+        </div>
+        <div class="superSecretFeature">
+            <!-- Interesting feature coming soon! -->
+        </div>
+    </div>
+    <br/>
+    <div class="lower">
+        <hr/>
+        <div class="graph">
+            <br/>
+            <br/>
+            <br/>
+            <center><p>Timeline graph coming soon!</p></center>
+            <br/>
+            <br/>
+            <br/>
+        </div>
+    </div>
+    <center><footer>DyNaMiX Scoring Engine (C) 2018 by CPDiscord. All rights reserved. Score report designed by WhiteHoodHacker.</footer></center>
+</body>
+</html>
