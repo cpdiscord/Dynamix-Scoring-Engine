@@ -77,7 +77,6 @@ namespace ScoringEngine
 			if (Convert.ToString(FWManager.LocalPolicy.CurrentProfile.FirewallEnabled) == status)
 			{
 				currentVulns = currentVulns + 1;
-                Console.WriteLine("Done");
 				HtmlScoring("Firewall has been set");
 			}
 			else { }
@@ -592,7 +591,7 @@ namespace ScoringEngine
                     string desiredVersion = words[1];
                     ProgramVersionCheck(location, desiredVersion);
                 }
-                catch { Console.WriteLine("Invalid Location! (This can appear while updating)"); }
+                catch { }
             }
 
             XmlNodeList shareDetection = xmlDoc.GetElementsByTagName("sharedetection");
