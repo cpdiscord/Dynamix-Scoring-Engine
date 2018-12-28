@@ -77,7 +77,7 @@ namespace ScoringEngine
 			if (Convert.ToString(FWManager.LocalPolicy.CurrentProfile.FirewallEnabled) == status)
 			{
 				currentVulns = currentVulns + 1;
-				HtmlScoring("Firewall has been set");
+				HtmlScoring("Firewall has been enabled");
 			}
 			else { }
 		}
@@ -157,7 +157,7 @@ namespace ScoringEngine
 				if (inList == false)
 				{
 					currentVulns = currentVulns + 1;
-					HtmlScoring("Share" + '"' + desiredShare + '"' + " has been deleted");
+					HtmlScoring("Share: " + '"' + desiredShare + '"' + " has been deleted");
 				}
 				else { }
 			}
@@ -180,7 +180,7 @@ namespace ScoringEngine
 			if (sc.Status.ToString() == "Stopped")
 			{
 				currentVulns = currentVulns + 1;
-				HtmlScoring(service + " is stopped");
+				HtmlScoring(service + " is not running");
 			}
 			else { }
 		}
@@ -300,7 +300,7 @@ namespace ScoringEngine
 					if (groupMembers.Contains(user) == true)
 					{
 						currentVulns = currentVulns + 1;
-						HtmlScoring(user + " is apart of " + groupName);
+						HtmlScoring(user + " is in the " + groupName + " group");
 					}
 				}
 			}
@@ -321,7 +321,7 @@ namespace ScoringEngine
 					if (groupMembers.Contains(user) == false)
 					{
 						currentVulns = currentVulns + 1;
-						HtmlScoring(user + " is not apart of " + groupName);
+						HtmlScoring(user + " is not in the " + groupName + " group");
 					}
 				}
 			}
@@ -521,16 +521,14 @@ namespace ScoringEngine
 
         public static string UppercaseFirst(string s)
         {
-            // Check for empty string.
             if (string.IsNullOrEmpty(s))
             {
                 return string.Empty;
             }
-            // Return char and concat substring.
             return char.ToUpper(s[0]) + s.Substring(1);
         }
 
-        public static void ParseScore() //This is to be expanded, this is just a proof on concept. 
+        public static void ParseScore()
         {
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(@"C:\DyNaMiX\answers.xml");
