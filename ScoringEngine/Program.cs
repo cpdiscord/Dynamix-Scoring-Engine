@@ -533,14 +533,14 @@ namespace ScoringEngine
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(@"C:\DyNaMiX\answers.xml");
 
-            XmlNodeList fileDetection = xmlDoc.GetElementsByTagName("filedetection");
+            XmlNodeList fileDetection = xmlDoc.GetElementsByTagName("FileDetection");
             for (int i = 0; i < fileDetection.Count; i++)
             {
                 string tempVar = fileDetection[i].InnerText;
                 FileDetection(tempVar);
             }
 
-            XmlNodeList forensicsDetection = xmlDoc.GetElementsByTagName("forensics");
+            XmlNodeList forensicsDetection = xmlDoc.GetElementsByTagName("ForensicsCheck");
             for (int i = 0; i < forensicsDetection.Count; i++)
             {
                 string tempVar = forensicsDetection[i].InnerText;
@@ -550,35 +550,35 @@ namespace ScoringEngine
                 ForensicsCheck(location, answer);
             }
 
-            XmlNodeList firewallCheck = xmlDoc.GetElementsByTagName("firewall");
+            XmlNodeList firewallCheck = xmlDoc.GetElementsByTagName("FirewallCheck");
             for (int i = 0; i < firewallCheck.Count; i++)
             {
                 string tempVar = firewallCheck[i].InnerText;
                 FirewallCheck(tempVar);
             }
 
-            XmlNodeList userLockout = xmlDoc.GetElementsByTagName("userlockout");
+            XmlNodeList userLockout = xmlDoc.GetElementsByTagName("UserLockout");
             for (int i = 0; i < userLockout.Count; i++)
             {
                 string tempVar = userLockout[i].InnerText;
                 UserLockout(tempVar);
             }
 
-            XmlNodeList userDisabled = xmlDoc.GetElementsByTagName("userdisabled");
+            XmlNodeList userDisabled = xmlDoc.GetElementsByTagName("UserDisabled");
             for (int i = 0; i < userDisabled.Count; i++)
             {
                 string tempVar = userDisabled[i].InnerText;
                 UserDisabled(tempVar);
             }
 
-            XmlNodeList userChangeable = xmlDoc.GetElementsByTagName("userchangeable");
+            XmlNodeList userChangeable = xmlDoc.GetElementsByTagName("UserPasswordChangeable");
             for (int i = 0; i < userChangeable.Count; i++)
             {
                 string tempVar = userChangeable[i].InnerText;
                 UserPasswordChangeable(tempVar);
             }
 
-            XmlNodeList programVersion = xmlDoc.GetElementsByTagName("programversion");
+            XmlNodeList programVersion = xmlDoc.GetElementsByTagName("ProgramVersionCheck");
             for (int i = 0; i < programVersion.Count; i++)
             {
                 try
@@ -592,28 +592,28 @@ namespace ScoringEngine
                 catch { }
             }
 
-            XmlNodeList shareDetection = xmlDoc.GetElementsByTagName("sharedetection");
+            XmlNodeList shareDetection = xmlDoc.GetElementsByTagName("ShareDetection");
             for (int i = 0; i < shareDetection.Count; i++)
             {
                 string tempVar = shareDetection[i].InnerText;
                 ShareDetection(tempVar);
             }
 
-            XmlNodeList serviceRunning = xmlDoc.GetElementsByTagName("servicerunning");
+            XmlNodeList serviceRunning = xmlDoc.GetElementsByTagName("ServiceRunning");
             for (int i = 0; i < serviceRunning.Count; i++)
             {
                 string tempVar = serviceRunning[i].InnerText;
                 ServiceRunning(tempVar);
             }
 
-            XmlNodeList serviceStopped = xmlDoc.GetElementsByTagName("servicestopped");
+            XmlNodeList serviceStopped = xmlDoc.GetElementsByTagName("ServiceStopped");
             for (int i = 0; i < serviceStopped.Count; i++)
             {
                 string tempVar = serviceStopped[i].InnerText;
                 ServiceStopped(tempVar);
             }
 
-            XmlNodeList LSPMinimum = xmlDoc.GetElementsByTagName("lspminimum");
+            XmlNodeList LSPMinimum = xmlDoc.GetElementsByTagName("LSPMinimumPasswordAge");
             for (int i = 0; i < LSPMinimum.Count; i++)
             {
                 string tempVar = LSPMinimum[i].InnerText;
@@ -623,7 +623,7 @@ namespace ScoringEngine
                 LSPMinimumPasswordAge(min, max);
             }
 
-            XmlNodeList LSPMaximum = xmlDoc.GetElementsByTagName("lspmaximum");
+            XmlNodeList LSPMaximum = xmlDoc.GetElementsByTagName("LSPMaximumPasswordAge");
             for (int i = 0; i < LSPMaximum.Count; i++)
             {
                 string tempVar = LSPMaximum[i].InnerText;
@@ -633,42 +633,42 @@ namespace ScoringEngine
                 LSPMaximumPasswordAge(min, max);
             }
 
-            XmlNodeList LSPComp = xmlDoc.GetElementsByTagName("lspcomp");
+            XmlNodeList LSPComp = xmlDoc.GetElementsByTagName("LSPPasswordComplexity");
             for (int i = 0; i < LSPComp.Count; i++)
             {
                 int tempVar = int.Parse(LSPComp[i].InnerText);
                 LSPPasswordComplexity(tempVar);
             }
 
-            XmlNodeList featureDisable = xmlDoc.GetElementsByTagName("featuredisable");
+            XmlNodeList featureDisable = xmlDoc.GetElementsByTagName("OptionFeatureDisable");
             for (int i = 0; i < featureDisable.Count; i++)
             {
                 string tempVar = featureDisable[i].InnerText;
                 OptionFeatureDisable(tempVar);
             }
 
-            XmlNodeList featureEnable = xmlDoc.GetElementsByTagName("featureenable");
+            XmlNodeList featureEnable = xmlDoc.GetElementsByTagName("OptionFeatureEnable");
             for (int i = 0; i < featureEnable.Count; i++)
             {
                 string tempVar = featureEnable[i].InnerText;
                 OptionFeatureEnable(tempVar);
             }
 
-            XmlNodeList programInstalled = xmlDoc.GetElementsByTagName("programinstalled");
+            XmlNodeList programInstalled = xmlDoc.GetElementsByTagName("IsProgramInstalled");
             for (int i = 0; i < programInstalled.Count; i++)
             {
                 string tempVar = programInstalled[i].InnerText;
                 IsProgramInstalled(tempVar);
             }
 
-            XmlNodeList programUninstalled = xmlDoc.GetElementsByTagName("programuninstalled");
+            XmlNodeList programUninstalled = xmlDoc.GetElementsByTagName("IsProgramUninstalled");
             for (int i = 0; i < programUninstalled.Count; i++)
             {
                 string tempVar = programUninstalled[i].InnerText;
                 IsProgramUninstalled(tempVar);
             }
 
-            XmlNodeList groupMembershipTrue = xmlDoc.GetElementsByTagName("groupmembertrue");
+            XmlNodeList groupMembershipTrue = xmlDoc.GetElementsByTagName("GroupMembershipTrue");
             for (int i = 0; i < groupMembershipTrue.Count; i++)
             {
                 string tempVar = groupMembershipTrue[i].InnerText;
@@ -678,7 +678,7 @@ namespace ScoringEngine
                 GroupMembershipTrue(user, groupName);
             }
 
-            XmlNodeList groupMembershipFalse = xmlDoc.GetElementsByTagName("groupmemberfalse");
+            XmlNodeList groupMembershipFalse = xmlDoc.GetElementsByTagName("GroupMembershipFalse");
             for (int i = 0; i < groupMembershipFalse.Count; i++)
             {
                 string tempVar = groupMembershipFalse[i].InnerText;
@@ -688,42 +688,42 @@ namespace ScoringEngine
                 GroupMembershipFalse(user, groupName);
             }
 
-            XmlNodeList groupExistTrue = xmlDoc.GetElementsByTagName("grouptrue");
+            XmlNodeList groupExistTrue = xmlDoc.GetElementsByTagName("GroupExistTrue");
             for (int i = 0; i < groupExistTrue.Count; i++)
             {
                 string tempVar = groupExistTrue[i].InnerText;
                 GroupExistTrue(tempVar);
             }
 
-            XmlNodeList groupExistFalse = xmlDoc.GetElementsByTagName("groupfalse");
+            XmlNodeList groupExistFalse = xmlDoc.GetElementsByTagName("GroupExistFalse");
             for (int i = 0; i < groupExistFalse.Count; i++)
             {
                 string tempVar = groupExistFalse[i].InnerText;
                 GroupExistFalse(tempVar);
             }
 
-            XmlNodeList internetZone = xmlDoc.GetElementsByTagName("internetZone");
+            XmlNodeList internetZone = xmlDoc.GetElementsByTagName("IEInternetZone");
             for (int i = 0; i < internetZone.Count; i++)
             {
                 string tempVar = internetZone[i].InnerText;
                 IEInternetZone(tempVar);
             }
 
-            XmlNodeList intranetZone = xmlDoc.GetElementsByTagName("intranetZone");
+            XmlNodeList intranetZone = xmlDoc.GetElementsByTagName("IEIntranetZone");
             for (int i = 0; i < intranetZone.Count; i++)
             {
                 string tempVar = intranetZone[i].InnerText;
                 IEIntranetZone(tempVar);
             }
 
-            XmlNodeList restrictedZone = xmlDoc.GetElementsByTagName("restrictedZone");
+            XmlNodeList restrictedZone = xmlDoc.GetElementsByTagName("IERestrictedZone");
             for (int i = 0; i < restrictedZone.Count; i++)
             {
                 string tempVar = restrictedZone[i].InnerText;
                 IERestrictedZone(tempVar);
             }
 
-            XmlNodeList iePopup = xmlDoc.GetElementsByTagName("iePopup");
+            XmlNodeList iePopup = xmlDoc.GetElementsByTagName("IEPopup");
             for (int i = 0; i < iePopup.Count; i++)
             {
                 string tempVar = iePopup[i].InnerText;
