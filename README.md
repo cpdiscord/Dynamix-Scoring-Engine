@@ -1,8 +1,8 @@
-# DyNaMiX Scoring Engine
+# Dynamix Scoring Engine
 
-The DyNaMiX Scoring Engine is a simple, public scoring program for fixing security vulnerabilities in a virtual machine image. It is maintained by the CPDiscord.
+The Dynamix Scoring Engine is a simple, public scoring program for fixing security vulnerabilities in a virtual machine image. It is maintained and owned by the CPDiscord Development Team.
 
-> WARNING: DyNaMiX is currently under development and has not been officially released.
+> Dynamix is currently under development and has not been officially released.
 
 ## To-Do List
 - [X] Forensics Questions checking
