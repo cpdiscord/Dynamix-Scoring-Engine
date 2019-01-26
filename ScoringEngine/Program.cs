@@ -188,7 +188,7 @@ namespace ScoringEngine
 
 		public static void LSPMinimumPasswordAge(int minValue, int maxValue) //Checks if the MinimumPasswordAge is between minValue and maxValue
 		{
-			string[] lines = System.IO.File.ReadAllLines(@"C:\DyNaMiX\Current-Policy.txt");
+			string[] lines = System.IO.File.ReadAllLines(@"C:\Dynamix\Current-Policy.txt");
 			string minimumPassword = Array.Find(lines,
 			   element => element.StartsWith("MinimumPasswordAge = ", StringComparison.Ordinal));
 
@@ -206,7 +206,7 @@ namespace ScoringEngine
 		}
 		public static void LSPMaximumPasswordAge(int minValue, int maxValue) //Checks if the MaximumPasswordAge is between minValue and maxValue
 		{
-			string[] lines = System.IO.File.ReadAllLines(@"C:\DyNaMiX\Current-Policy.txt");
+			string[] lines = System.IO.File.ReadAllLines(@"C:\Dynamix\Current-Policy.txt");
 			string maximumPassword = Array.Find(lines,
 			   element => element.StartsWith("MaximumPasswordAge = ", StringComparison.Ordinal));
 
@@ -224,7 +224,7 @@ namespace ScoringEngine
 		}
 		public static void LSPPasswordComplexity(int desiredValue) //Checks if PasswordComplexity is set to 1 (Enabled) or 0 (Disabled)
 		{
-			string[] lines = System.IO.File.ReadAllLines(@"C:\DyNaMiX\Current-Policy.txt");
+			string[] lines = System.IO.File.ReadAllLines(@"C:\Dynamix\Current-Policy.txt");
 			string passwordComplexity = Array.Find(lines,
 			   element => element.StartsWith("PasswordComplexity = ", StringComparison.Ordinal));
 			string temp = passwordComplexity.Split(new string[] { "PasswordComplexity = " }, StringSplitOptions.None).Last();
@@ -433,7 +433,7 @@ namespace ScoringEngine
 
         public static void HtmlScoring(string text) //Outputs input above "</ul>"
 		{
-            string location = @"C:\\DyNaMiX\\score_report.html";
+            string location = @"C:\\Dynamix\\score_report.html";
             string lineToFind = "			<!--correct-->";
 
 			List<string> lines = File.ReadLines(location).ToList();
@@ -452,22 +452,22 @@ namespace ScoringEngine
 			IWshRuntimeLibrary.IWshShortcut shortcut = wsh.CreateShortcut(
 				Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\Scoring Report.lnk") as IWshRuntimeLibrary.IWshShortcut;
 			shortcut.Arguments = "";
-			shortcut.TargetPath = "C:\\DyNaMiX\\score_report.html";
+			shortcut.TargetPath = "C:\\Dynamix\\score_report.html";
 			shortcut.WindowStyle = 1;
 			shortcut.Description = "Windows Scoring Report";
-			shortcut.WorkingDirectory = "c:\\DyNaMiX";
-			shortcut.IconLocation = "C:\\DyNaMiX\\dx-128-icon.ico";
+			shortcut.WorkingDirectory = "c:\\Dynamix";
+			shortcut.IconLocation = "C:\\Dynamix\\dx-128-icon.ico";
 			shortcut.Save();
 		}
 
 		public static void CreateHTML()
 		{
-			File.Delete(@"C:\DyNaMiX\score_report.html");
-			File.Copy(@"C:\DyNaMiX\base_report.html", @"C:\DyNaMiX\score_report.html");
+			File.Delete(@"C:\Dynamix\score_report.html");
+			File.Copy(@"C:\Dynamix\base_report.html", @"C:\Dynamix\score_report.html");
 		}
         public static void EditHTML()
         {
-            string location = @"C:\DyNaMiX\score_report.html";
+            string location = @"C:\Dynamix\score_report.html";
             string lineToFind = "			<!--issues-->";
 
             List<string> lines = File.ReadLines(location).ToList();
@@ -486,7 +486,7 @@ namespace ScoringEngine
 
         public static int TotalVulns()
         {
-            int lineCount = File.ReadLines(@"C:\DyNaMiX\answers.xml").Count();
+            int lineCount = File.ReadLines(@"C:\Dynamix\answers.xml").Count();
             return lineCount - 3;
         }
 
@@ -498,7 +498,7 @@ namespace ScoringEngine
 			{
 				WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
 				FileName = "cmd.exe",
-				Arguments = "/C SecEdit /export /cfg c:\\DyNaMiX\\Current-Policy.txt"
+				Arguments = "/C SecEdit /export /cfg c:\\Dynamix\\Current-Policy.txt"
 			};
 			process.StartInfo = startInfo;
 			process.Start();
@@ -531,7 +531,7 @@ namespace ScoringEngine
         public static void ParseScore()
         {
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(@"C:\DyNaMiX\answers.xml");
+            xmlDoc.Load(@"C:\Dynamix\answers.xml");
 
             XmlNodeList fileDetection = xmlDoc.GetElementsByTagName("FileDetection");
             for (int i = 0; i < fileDetection.Count; i++)
@@ -735,3 +735,4 @@ namespace ScoringEngine
 //UwU
 // D Y N A M I X
 //All done by TheiMacNoob with mental assistance done Matthew and rainbow did some stuff too. feat. Stack Overflow
+//Hi, white did stuff too
